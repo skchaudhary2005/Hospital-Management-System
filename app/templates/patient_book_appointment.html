@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - HMS{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin-top: 30px;">
+    <h1 class="page-title mb-4">
+        <i class="fas fa-calendar-plus"></i> Book an Appointment
+    </h1>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" novalidate>
+                {{ form.hidden_tag() }}
+
+                <!-- Doctor -->
+                <div class="form-group mb-3">
+                    {{ form.doctor.label(class="form-label") }}
+
+                    {% if form.doctor.errors %}
+                        {{ form.doctor(class="form-select is-invalid") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.doctor.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.doctor(class="form-select") }}
+                    {% endif %}
+                </div>
+
+                <!-- Date -->
+                <div class="form-group mb-3">
+                    {{ form.date.label(class="form-label") }}
+
+                    {% if form.date.errors %}
+                        {{ form.date(class="form-control is-invalid", type="date") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.date.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.date(class="form-control", type="date") }}
+                    {% endif %}
+                </div>
+
+                <!-- Time -->
+                <div class="form-group mb-3">
+                    {{ form.time.label(class="form-label") }}
+
+                    {% if form.time.errors %}
+                        {{ form.time(class="form-control is-invalid", type="time") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.time.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.time(class="form-control", type="time") }}
+                    {% endif %}
+                </div>
+
+                <!-- Reason -->
+                <div class="form-group mb-3">
+                    {{ form.reason.label(class="form-label") }}
+
+                    {% if form.reason.errors %}
+                        {{ form.reason(class="form-control is-invalid", rows="4") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.reason.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.reason(class="form-control", rows="4",
+                        placeholder="Describe your medical concern...") }}
+                    {% endif %}
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </button>
+
+                    <a href="{{ url_for('main.patient_dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.page-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Doctors - HMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="page-title"><i class="fas fa-user-md"></i> Manage Doctors</h1>
+        </div>
+        <div class="col-auto">
+            <a href="{{ url_for('main.add_doctor') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Doctor
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-list"></i> All Doctors ({{ doctors|length }})
+        </div>
+        <div class="card-body">
+            {% if doctors %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Specialization</th>
+                                <th>License Number</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doctor in doctors %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                    <i class="fas fa-user-md text-primary"></i>
+                                    {{ doctor.user.name }}
+                                </td>
+                                <td>{{ doctor.user.email }}</td>
+                                <td>
+                                    <span class="badge bg-info">{{ doctor.specialization }}</span>
+                                </td>
+                                <td>
+                                    {% if doctor.license_number %}
+                                        {{ doctor.license_number }}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if doctor.phone %}
+                                        {{ doctor.phone }}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="{{ url_for('main.doctor_patients', doctor_id=doctor.id) }}" 
+                                           class="btn btn-info" title="View Patients">
+                                            <i class="fas fa-users"></i> Patients
+                                        </a>
+                                        <a href="{{ url_for('main.delete_doctor', doctor_id=doctor.id) }}" 
+                                           class="btn btn-danger" 
+                                           onclick="return confirm('Are you sure you want to delete this doctor?');"
+                                           title="Delete Doctor">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle"></i> No doctors available yet.
+                    <a href="{{ url_for('main.add_doctor') }}" class="alert-link">Add your first doctor</a>
+                </div>
+            {% endif %}
+
+            <hr>
+            <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    .badge {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-group-sm .btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}

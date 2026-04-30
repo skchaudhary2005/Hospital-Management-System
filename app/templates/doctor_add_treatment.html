@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Add Treatment - HMS{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin-top: 30px;">
+    
+    <h2 class="mb-4 text-center">
+        <i class="fas fa-notes-medical"></i> Add Treatment
+    </h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <form method="POST" novalidate>
+                {{ form.hidden_tag() }}
+
+                <!-- Diagnosis -->
+                <div class="mb-3">
+                    {{ form.diagnosis.label(class="form-label fw-bold") }}
+
+                    {% if form.diagnosis.errors %}
+                        {{ form.diagnosis(class="form-control is-invalid", rows="3") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.diagnosis.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.diagnosis(class="form-control", rows="3", placeholder="Enter diagnosis...") }}
+                    {% endif %}
+                </div>
+
+                <!-- Prescription -->
+                <div class="mb-3">
+                    {{ form.prescription.label(class="form-label fw-bold") }}
+
+                    {% if form.prescription.errors %}
+                        {{ form.prescription(class="form-control is-invalid", rows="3") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.prescription.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.prescription(class="form-control", rows="3", placeholder="Enter prescription...") }}
+                    {% endif %}
+                </div>
+
+                <!-- Notes -->
+                <div class="mb-3">
+                    {{ form.notes.label(class="form-label fw-bold") }}
+
+                    {% if form.notes.errors %}
+                        {{ form.notes(class="form-control is-invalid", rows="2") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.notes.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.notes(class="form-control", rows="2", placeholder="Additional notes (optional)...") }}
+                    {% endif %}
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save"></i> Save Treatment
+                    </button>
+
+                    <a href="{{ url_for('main.doctor_dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<style>
+h2 {
+    color: #2c3e50;
+    font-weight: 600;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - HMS{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin-top: 30px;">
+    <h1 class="mb-4">
+        <i class="fas fa-user-edit"></i> Edit Your Profile
+    </h1>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" novalidate>
+                {{ form.hidden_tag() }}
+
+                <!-- 🔹 NAME FIELD -->
+                <div class="form-group mb-3">
+                    {{ form.name.label(class="form-label") }}
+
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control is-invalid") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control", placeholder="Enter your name") }}
+                    {% endif %}
+                </div>
+
+                <!-- 🔹 EMAIL FIELD (UPGRADED) -->
+                <div class="form-group mb-3">
+                    {{ form.email.label(class="form-label") }}
+
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control is-invalid") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control", placeholder="Enter your email") }}
+                    {% endif %}
+                </div>
+
+                <!-- 🔹 BUTTON (UPGRADED FULL WIDTH) -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-save"></i> Update Profile
+                    </button>
+
+                    <a href="{{ url_for('main.patient_dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

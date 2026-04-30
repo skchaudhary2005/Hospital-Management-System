@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Patients - HMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="fas fa-users"></i> Manage Patients</h1>
+        </div>
+    </div>
+
+    {% if patients %}
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-list"></i> All Patients ({{ patients|length }})
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Total Appointments</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for patient in patients %}
+                        <tr>
+                            <td><strong>{{ patient.user.name }}</strong></td>
+                            <td>{{ patient.user.email }}</td>
+                            <td><span class="badge bg-success">{{ patient.appointments|length }}</span></td>
+                            <td>
+                                <!-- View Details Button -->
+                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#patientModal{{ patient.id }}" title="View patient details">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                
+                                <!-- Delete Button -->
+                                <a href="{{ url_for('main.delete_patient', patient_id=patient.id) }}" 
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure you want to delete this patient? This action cannot be undone.');"
+                                   title="Delete patient">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Patient Details Modal -->
+                        <div class="modal fade" id="patientModal{{ patient.id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-info text-white">
+                                        <h5 class="modal-title">Patient Details</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>Name:</strong></label>
+                                            <p class="form-control-plaintext">{{ patient.user.name }}</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>Email:</strong></label>
+                                            <p class="form-control-plaintext">{{ patient.user.email }}</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>Total Appointments:</strong></label>
+                                            <p class="form-control-plaintext">{{ patient.appointments|length }}</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>Recent Appointments:</strong></label>
+                                            {% if patient.appointments %}
+                                                <div class="list-group list-group-sm">
+                                                    {% for appointment in patient.appointments[:5] %}
+                                                    <div class="list-group-item">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <h6 class="mb-1">{{ appointment.doctor.user.name }} - {{ appointment.doctor.specialization }}</h6>
+                                                            <small>
+                                                                {% if appointment.status == 'Booked' %}
+                                                                    <span class="badge bg-warning">{{ appointment.status }}</span>
+                                                                {% elif appointment.status == 'Completed' %}
+                                                                    <span class="badge bg-success">{{ appointment.status }}</span>
+                                                                {% elif appointment.status == 'Cancelled' %}
+                                                                    <span class="badge bg-danger">{{ appointment.status }}</span>
+                                                                {% endif %}
+                                                            </small>
+                                                        </div>
+                                                        <small class="text-muted">{{ appointment.date }} at {{ appointment.time }}</small>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                                {% if patient.appointments|length > 5 %}
+                                                    <small class="text-muted mt-2 d-block">...and {{ patient.appointments|length - 5 }} more</small>
+                                                {% endif %}
+                                            {% else %}
+                                                <p class="text-muted">No appointments yet</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> No patients registered yet.
+    </div>
+    {% endif %}
+
+    <div class="mt-3">
+        <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- Bootstrap JS for modals -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}
