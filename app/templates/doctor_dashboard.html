@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <h2>👨‍⚕️ Welcome Dr. {{ doctor_name }}</h2>
+
+    <!-- TODAY APPOINTMENTS -->
+    <div class="card mt-3">
+        <div class="card-header bg-primary text-white">
+            Today's Appointments
+        </div>
+        <div class="card-body">
+
+            {% if today_appointments %}
+            <table class="table">
+                <tr>
+                    <th>Patient</th>
+                    <th>Time</th>
+                    <th>Reason</th>
+                </tr>
+
+                {% for appt in today_appointments %}
+                <tr>
+                    <td>
+                        {{ appt.patient.user.name if appt.patient and appt.patient.user else "No Patient" }}
+                    </td>
+                    <td>{{ appt.time }}</td>
+                    <td>{{ appt.reason }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <div class="alert alert-info">No appointments today</div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- FORM + PATIENTS -->
+    <div class="row mt-4">
+
+        <!-- FORM -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    Update Patient History
+                </div>
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        <select name="patient_id" class="form-control mb-2">
+                            <option disabled selected>Choose patient...</option>
+                            {% for p in patients %}
+                            <option value="{{ p.id }}">{{ p.user.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <textarea name="diagnosis" class="form-control mb-2"
+                            placeholder="Diagnosis"></textarea>
+
+                        <textarea name="prescription" class="form-control mb-2"
+                            placeholder="Prescription"></textarea>
+
+                        <textarea name="notes" class="form-control mb-2"
+                            placeholder="Notes"></textarea>
+
+                        <button class="btn btn-warning w-100">
+                            Update
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- PATIENT LIST -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    Assigned Patients
+                </div>
+                <div class="card-body">
+
+                    {% if patients %}
+                        {% for p in patients %}
+                        <div>
+                            <strong>{{ p.user.name }}</strong><br>
+                            <small>{{ p.user.email }}</small>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info">No patients assigned</div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PATIENT HISTORY -->
+    <div class="card mt-4">
+        <div class="card-header bg-success text-white">
+            Patient History
+        </div>
+
+        <div class="card-body">
+            <table class="table">
+                <tr>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Reason</th>
+                    <th>Diagnosis</th>
+                    <th>Prescription</th>
+                </tr>
+
+                {% if treatments %}
+                    {% for t in treatments %}
+                    <tr>
+                        <td>
+                            {{ t.appointment.patient.user.name if t.appointment.patient else "No Patient" }}
+                        </td>
+                        <td>
+                            {{ t.appointment.date.strftime('%d-%m-%Y') }}
+                        </td>
+                        <td>{{ t.appointment.reason }}</td>
+                        <td>{{ t.diagnosis }}</td>
+                        <td>{{ t.prescription }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            No treatment history yet
+                        </td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="card mt-4">
+        <div class="card-header bg-secondary text-white">
+            Doctor Schedule
+        </div>
+        <div class="card-body">
+
+            <a href="{{ url_for('main.edit_schedule') }}" class="btn btn-secondary">
+                ✏️ Edit Schedule
+            </a>
+
+        </div>
+    </div>
+
+    <!-- ACTION -->
+    <a href="{{ url_for('main.doctor_appointments') }}"
+       class="btn btn-primary w-100 mt-3">
+       View All Appointments
+    </a>
+
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - HMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title"><i class="fas fa-chart-line"></i> Admin Dashboard</h1>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <i class="fas fa-user-md"></i>
+        <h3>Total Doctors</h3>
+        <div class="stat-number">{{ stats.get('total_doctors', 0) }}</div>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-users"></i>
+        <h3>Total Patients</h3>
+        <div class="stat-number">{{ stats.get('total_patients', 0) }}</div>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Total Appointments</h3>
+        <div class="stat-number">{{ stats.get('total_appointments', 0) }}</div>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-clock"></i>
+        <h3>Upcoming Appointments</h3>
+        <div class="stat-number">{{ stats.get('upcoming_appointments', 0) }}</div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-cog"></i> Quick Actions
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('main.add_doctor') }}" class="btn btn-primary btn-sm me-2 mb-2">
+                    <i class="fas fa-plus"></i> Add Doctor
+                </a>
+                <a href="{{ url_for('main.add_patient') }}" class="btn btn-success btn-sm me-2 mb-2">
+                    <i class="fas fa-user-plus"></i> Add Patient
+                </a>
+                <a href="{{ url_for('main.manage_doctors') }}" class="btn btn-info btn-sm me-2 mb-2">
+                    <i class="fas fa-list"></i> Manage Doctors
+                </a>
+                <a href="{{ url_for('main.manage_patients') }}" class="btn btn-info btn-sm me-2 mb-2">
+                    <i class="fas fa-list"></i> Manage Patients
+                </a>
+                <a href="{{ url_for('main.manage_appointments') }}" class="btn btn-info btn-sm mb-2">
+                    <i class="fas fa-list"></i> View Appointments
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-info-circle"></i> System Status
+            </div>
+            <div class="card-body">
+                <p><strong>Status:</strong> <span class="badge bg-success">Online</span></p>
+                <p><strong>Database:</strong> <span class="badge bg-success">Connected</span></p>
+                <p><strong>Admin User:</strong> <span class="badge bg-info">admin@hospital.com</span></p>
+                <p><strong>Departments:</strong> {{ stats.get('total_departments', 'N/A') }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info mt-4">
+    <i class="fas fa-lightbulb"></i> 
+    <strong>Note:</strong> Click the buttons to manage doctors, patients, and appointments.
+</div>
+{% endblock %}

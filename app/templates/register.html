@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="col-md-5 col-lg-4">
+        <!-- Welcome Section -->
+        <div class="text-center mb-5">
+            <div style="font-size: 4rem; color: var(--primary-light); margin-bottom: 15px;">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-dark); margin-bottom: 10px;">
+                Create Account
+            </h1>
+            <p style="color: var(--text-light); margin-top: 15px;">
+                Join our hospital management system as a patient
+            </p>
+        </div>
+
+        <!-- Register Form Card -->
+        <div class="card border-0" style="box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <div class="card-body p-4">
+                <form method="POST" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="form-group mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {% if form.name.errors %}
+                            {{ form.name(class="form-control is-invalid", placeholder="Enter your full name") }}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.name.errors %}
+                                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.name(class="form-control", placeholder="Enter your full name") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.email.label(class="form-label") }}
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control is-invalid", placeholder="Enter your email") }}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.email.errors %}
+                                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control", placeholder="Enter your email") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control is-invalid", placeholder="Enter password (min 6 characters)") }}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.password.errors %}
+                                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control", placeholder="Enter password (min 6 characters)") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group mb-4">
+                        {{ form.confirm_password.label(class="form-label") }}
+                        {% if form.confirm_password.errors %}
+                            {{ form.confirm_password(class="form-control is-invalid", placeholder="Confirm password") }}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.confirm_password.errors %}
+                                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.confirm_password(class="form-control", placeholder="Confirm password") }}
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2 mb-3" style="font-weight: 600; font-size: 1rem;">
+                        <i class="fas fa-user-plus"></i> Register Now
+                    </button>
+                </form>
+
+                <hr style="color: var(--light-border);">
+
+                <p class="text-center mb-0">
+                    Already have an account? 
+                    <a href="{{ url_for('main.login') }}" style="color: var(--primary-light); font-weight: 600; text-decoration: none;">
+                        Login here
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-label {
+        color: var(--text-dark);
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 2px solid var(--light-border);
+        padding: 10px 14px;
+        background-color: var(--light-bg);
+        color: var(--text-dark);
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 0.3rem rgba(59, 130, 246, 0.1);
+        background-color: var(--light-bg);
+        color: var(--text-dark);
+    }
+
+    .form-control::placeholder {
+        color: var(--text-light);
+    }
+</style>
+{% endblock %}

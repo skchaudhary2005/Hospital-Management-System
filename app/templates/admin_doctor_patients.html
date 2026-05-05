@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}{{ doctor.user.name }} - Patients - HMS{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="page-title">
+                <i class="fas fa-user-md text-primary"></i> 
+                Dr. {{ doctor.user.name }}
+            </h1>
+            <p class="text-muted">
+                <i class="fas fa-briefcase"></i> {{ doctor.specialization }}
+                {% if doctor.license_number %}
+                    | License: {{ doctor.license_number }}
+                {% endif %}
+            </p>
+        </div>
+        <div class="col-auto">
+            <a href="{{ url_for('main.manage_doctors') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Doctors
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-users"></i> Patients & Appointments ({{ appointments|length }})
+        </div>
+        <div class="card-body">
+            {% if appointments %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Patient Name</th>
+                                <th>Patient Email</th>
+                                <th>Appointment Date</th>
+                                <th>Appointment Time</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                    <i class="fas fa-user text-success"></i>
+                                    {{ appointment.patient.user.name }}
+                                </td>
+                                <td>{{ appointment.patient.user.email }}</td>
+                                <td>{{ appointment.date.strftime('%d-%m-%Y') }}</td>
+                                <td>{{ appointment.time.strftime('%H:%M') }}</td>
+                                <td>
+                                    {% if appointment.reason %}
+                                        {{ appointment.reason[:50] }}{% if appointment.reason|length > 50 %}...{% endif %}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if appointment.status == 'Booked' %}
+                                        <span class="badge bg-warning">Booked</span>
+                                    {% elif appointment.status == 'Completed' %}
+                                        <span class="badge bg-success">Completed</span>
+                                    {% elif appointment.status == 'Cancelled' %}
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ appointment.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle"></i> This doctor has no appointments yet.
+                </div>
+            {% endif %}
+
+            <hr>
+            <a href="{{ url_for('main.manage_doctors') }}" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> Back to Doctors
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    .badge {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .page-title {
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}

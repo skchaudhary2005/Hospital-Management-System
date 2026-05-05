@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Dashboard - HMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title"><i class="fas fa-user-circle"></i> Patient Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-calendar-check"></i> Upcoming Appointments
+            </div>
+            <div class="card-body">
+                {% if appointments %}
+                <ul class="list-group">
+                    {% for appt in appointments %}
+                    <li class="list-group-item">
+                        <strong>
+                            Dr. {{ appt.doctor.user.name if appt.doctor and appt.doctor.user else "Doctor Not Available"
+                            }}
+                        </strong>
+                        <br>
+
+                        <small>{{ appt.date }} at {{ appt.time }}</small>
+                        <br>
+
+                        <span class="badge bg-info">{{ appt.status }}</span>
+
+                        {% if appt.status == 'Booked' %}
+                        <a href="{{ url_for('main.cancel_appointment', appointment_id=appt.id) }}"
+                            class="btn btn-sm btn-danger float-end"
+                            onclick="return confirm('Cancel this appointment?')">
+                            Cancel
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No upcoming appointments</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-cog"></i> Quick Actions
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('main.search_doctors') }}" class="btn btn-primary btn-sm d-block mb-2 w-100">
+                    <i class="fas fa-search"></i> Search Doctors
+                </a>
+
+                <a href="{{ url_for('main.book_appointment') }}" class="btn btn-success btn-sm d-block mb-2 w-100">
+                    <i class="fas fa-calendar-plus"></i> Book Appointment
+                </a>
+
+                <a href="{{ url_for('main.patient_appointments') }}" class="btn btn-info btn-sm d-block mb-2 w-100">
+                    <i class="fas fa-calendar-alt"></i> My Appointments
+                </a>
+
+                {% if current_user.patient %}
+                <a href="{{ url_for('main.patient_history', patient_id=current_user.patient.id) }}"
+                    class="btn btn-info btn-sm d-block mb-2 w-100">
+                    <i class="fas fa-file-medical"></i> Medical History
+                </a>
+                {% endif %}
+
+                <a href="{{ url_for('main.edit_patient_profile') }}" class="btn btn-warning btn-sm d-block w-100">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-hospital"></i> Available Departments
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% if departments %}
+                    {% for dept in departments %}
+                    <div class="col-md-4 mb-3">
+                        <div class="alert alert-info">
+                            <strong>{{ dept.name }}</strong>
+                            <br>
+                            <small>{{ dept.description }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="text-muted">No departments available</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

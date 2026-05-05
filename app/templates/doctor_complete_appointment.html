@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Appointment - HMS{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin-top: 30px;">
+    <h1 class="mb-4"><i class="fas fa-stethoscope"></i> Complete Appointment</h1>
+
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-user"></i> Appointment Details
+        </div>
+        <div class="card-body">
+            <p><strong>Patient Name:</strong> {{ appointment.patient.user.name }}</p>
+            <p><strong>Date:</strong> {{ appointment.date.strftime('%d-%m-%Y') }}</p>
+            <p><strong>Time:</strong> {{ appointment.time }}</p>
+            <p><strong>Reason:</strong> {{ appointment.reason }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-notes-medical"></i> Treatment Details
+        </div>
+        <div class="card-body">
+            <form method="POST" novalidate>
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group mb-3">
+                    {{ form.diagnosis.label(class="form-label") }}
+                    {% if form.diagnosis.errors %}
+                        {{ form.diagnosis(class="form-control is-invalid", rows="3") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.diagnosis.errors %}<span>{{ error }}</span>{% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.diagnosis(class="form-control", rows="3", placeholder="Enter diagnosis") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form.prescription.label(class="form-label") }}
+                    {% if form.prescription.errors %}
+                        {{ form.prescription(class="form-control is-invalid", rows="3") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.prescription.errors %}<span>{{ error }}</span>{% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.prescription(class="form-control", rows="3", placeholder="Enter prescription") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form.notes.label(class="form-label") }}
+                    {% if form.notes.errors %}
+                        {{ form.notes(class="form-control is-invalid", rows="3") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.notes.errors %}<span>{{ error }}</span>{% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.notes(class="form-control", rows="3", placeholder="Additional notes") }}
+                    {% endif %}
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-check"></i> Complete Appointment
+                    </button>
+                    <a href="{{ url_for('main.doctor_appointments') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
